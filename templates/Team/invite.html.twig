@@ -1,0 +1,16 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+
+    <div class="card w-75 mx-auto pm-header-content">
+        <h1 class="mb-4 text-center">Schnell und einfach, lade einen Nutzer ein.</h1>
+        <div class="container mx-auto bg-light p-4 rounded mb-4" style="width: auto;">
+            {{ form_start(form) }}
+            {{ form_rest(form) }}
+            <p class="mx-auto text-center m-0" style="color: #8d8d8ddd;">* Felder sind Pflichtfelder</p>
+        </div>
+        <button class="btn btn-outline-light pm-project-create-btn mx-auto" type="submit" id="btn-project-label">
+            Hinzufügen
+        </button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

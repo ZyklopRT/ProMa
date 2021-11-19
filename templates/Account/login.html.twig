@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div id="account-body">
+        <!-- MAIN CONTENT -->
+        <div class="pm-account-container rounded">
+            <form class="needs-validation" action="{{ path('account_login') }}" method="POST">
+                <div class="mb-5 pm-account-text">
+                    <h1>Anmelden</h1>
+                    <p>ProMa Mitglied</p>
+                </div>
+                <div class="form-floating mb-3">
+                    {# USERNAME INPUT #}
+                    <input type="text" class="pm-account-input form-control"
+                           id="floating_uid
+            acccountValidationFeedUID" aria-labelledby="acccountValidationFeedUID"
+                           placeholder="Benutzername"
+                           name="_username" value="{{ last_username }}" required>
+                    <label for="floating_uid">Benutzername</label>
+                </div>
+                <div class="form-floating mb-3">
+                    {# PASSWORD INPUT #}
+                    <input type="password" class="pm-account-input form-control" id="floating_pwd
+            acccountValidationFeedPWD"
+                           placeholder="Password" aria-labelledby="acccountValidationFeedPWD"
+                           name="_password" required>
+                    <label for="floating_pwd">Password</label>
+                </div>
+                <hr>
+                <div class="pm-disclaimer-container">
+                    <a class="pm-disclaimer-text" href="{{ path('account_register') }}">Du hast kein Konto? Hier
+                        registrieren!</a>
+                </div>
+                <div class="pm-account-btn-container">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <input type="hidden" name="_target_path" value="{{ path('default') }}"/>
+                    <button type="submit" name="submit" value="submit" class="btn btn-primary pm-account-btn"><img
+                                src="{{ asset('imgs/login.png') }}" alt="Anmelden" width="35" height="35"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

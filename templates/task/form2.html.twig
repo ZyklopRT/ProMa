@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="card w-75 mx-auto pm-header-content">
+        <h1 class="mb-3 text-center">Schnell und ganz einfach.<br>Erstelle ein neues Projekt!</h1>
+        {{ form_start(form) }}
+        <div class="pm-project-group input-group mb-3">
+            {{ form_row(form.name) }}
+            <button class="btn btn-outline-light pm-project-create-btn" type="submit" id="btn-project-label">erstellen
+            </button>
+        </div>
+
+        <div class="accordion pm-accordion-project" id="accordionExample">
+            <div class="pm-project-accordion-item accordion-item">
+                <h2 class="pm-accordion-header accordion-header" id="projectPanel-headingCreate">
+                    <button class="accordion-button collapsed pm-project-create-btn" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#projectPanel-collapseCreate"
+                            aria-expanded="false" aria-controls="projectPanel-collapseCreate">
+                    </button>
+                </h2>
+                <!-- PROJECT CREATE OPTIONS -->
+                <div id="projectPanel-collapseCreate" class="accordion-collapse collapse"
+                     aria-labelledby="projectPanel-headingCreate">
+                    <div class="pm-accordion-body accordion-body container">
+                        <div class="card-body">
+                            {{ form_rest(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

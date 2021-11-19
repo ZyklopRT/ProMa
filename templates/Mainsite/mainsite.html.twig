@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="pm-header-container container-fluid">
+        <div class="pm-header-content">
+            <h1 class="mb-3 text-center">Suche bequem und schnell nach einem Projekt. </h1>
+            <form action="index.php?controller=Project&action=index" class="pm-header-form" method="POST">
+                <div class="pm-project-group input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Projekt-Name..." aria-label="Projekt-Name..."
+                           aria-describedby="btn-project-label">
+                    <button class="btn btn-outline-light pm-project-create-btn" type="submit" name="submit"
+                            id="btn-project-label">Suchen
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

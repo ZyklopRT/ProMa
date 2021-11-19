@@ -1,0 +1,36 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+    <div class="card w-75 mx-auto pm-header-content">
+        <h1 class="mb-3 text-center">Schnell und ganz einfach.<br>Erstelle ein neues Team!</h1>
+        {{ form_start(form) }}
+        <div class="pm-project-group input-group mb-3 text-center w-100">
+            {{ form_row(form.name) }}
+            <button class="btn btn-outline-light pm-project-create-btn" type="submit" id="btn-project-label">erstellen
+            </button>
+        </div>
+
+        <div class="accordion pm-accordion-project bg-transparent" id="accordionExample">
+            <div class="pm-project-accordion-item bg-transparent accordion-item">
+                <h2 class="pm-accordion-header accordion-header mb-2" id="projectPanel-headingCreate">
+                    <button class="bg-transparent accordion-button collapsed pm-project-create-btn pm-project-options-btn"
+                            type="button" data-bs-toggle="collapse" data-bs-target="#projectPanel-collapseCreate"
+                            aria-expanded="false" aria-controls="projectPanel-collapseCreate">
+                    </button>
+                </h2>
+                <!-- PROJECT CREATE OPTIONS -->
+                <div id="projectPanel-collapseCreate" class="p-5  accordion-collapse collapse"
+                     aria-labelledby="projectPanel-headingCreate">
+                    <div class="pm-accordion-body accordion-body container border-none">
+                        <div class="card-body">
+                            {{ form_rest(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="link-dark text-center d-block mx-auto" href="{{ path('team_join') }}">Du möchtest ein Team
+            beitreten?</a>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

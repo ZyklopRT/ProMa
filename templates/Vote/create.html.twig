@@ -1,0 +1,35 @@
+{% extends 'Project/view.html.twig' %}
+{% block votePopUp %}
+    <!-- Feature Vote -->
+    <div class="pm-feature-vote-container" id="feature-vote-container-{{ feature.id }}">
+        <div class="pm-feature-vote-inner-container container rounded">
+            <h1>Feature bewerten</h1>
+            <p class="mb-4">({{ feature.name }})</p>
+            <form action="{{ path('vote_add', {'feature_id': feature.id, 'project_id': feature.project.id}) }}"
+                  method="POST">
+                <label class="form-label text-start" for="pm-vote-input1">Zeitaufwand</label>
+                <div class="input-group mb-2">
+                    <input id="pm-vote-input1" type="text" class="form-control" placeholder="Schätzung..." name="time"
+                           pattern="[0-9]+\,\." required>
+                    <div class="input-group-append">
+                        <select class="form-select" id="inputGroupSelect01" name="timeFilter">
+                            <option selected value="1">Stunden</option>
+                            <option value="2">P-Tage</option>
+                        </select>
+                    </div>
+                </div>
+                <label class="form-label text-start" for="pm-vote-input2">Priorität <span
+                            style="color: rgba(131,131,131,0.87);">(optional)</span></label>
+                <input id="pm-vote-input1" type="text" class="form-control mb-5" placeholder="Schätzung..."
+                       name="priority" pattern="[1-9]+">
+                <button type="submit" value="submit" name="submit" class="btn btn-primary mx-auto d-block">Bewerten
+                </button>
+            </form>
+            <div class="pm-vote-close-container">
+                <button onclick="closeVoteContainer({{ feature.id }})">
+                    <img src="{{ asset('imgs/close.png') }}" alt="Schließen" width="22" height="22">
+                </button>
+            </div>
+        </div>
+    </div> <!-- end of feature vote-->
+{% endblock %}

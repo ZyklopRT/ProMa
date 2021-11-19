@@ -1,0 +1,55 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+    <h1 class="pm-account-view-title">Deine Teams</h1>
+    <!-- PROJECT FILTER -->
+    <ul class="pm-account-view-filter">
+        <li><a class="link-dark" href="{{ path('dashboard_teams', {'filter': 'all'}) }}">Alle</a></li>
+        <li>•</li>
+        <li><a class="link-dark" href="{{ path('dashboard_teams', {'filter': 'self'}) }}">Eigene</a></li>
+    </ul>
+    <!-- TEAMS -->
+    <div class="row justify-content-center justify-content-md-start">
+        {% for team in teams %}
+            <div class="col-auto mt-3">
+                <article class="h-100">
+                    <div class="card pm-view-article" style="width: 18rem;">
+                        <img src="{{ asset('imgs/background.jpg') }}" class="card-img-top" alt="...">
+                        <span class="pm-view-article-delete" data-toggle="tooltip" data-placement="top"
+                              title="Team entfernen">
+                                <a href="{{ path('team_remove', {'team_id': team.id}) }}"><img
+                                            src="{{ asset('imgs/bin.png') }}" alt="Löschen" width="15" height="15"></a>
+                            </span>
+                        <span class="pm-view-article-visible">
+                                {{ team.admin.uuid }}<br>
+                                {% if(team.invitation == 1) %} Privat {% else %} Offen {% endif %}
+                            </span>
+                        <div class="card-body pm-view-article-body">
+                            <h5 class="card-title pm-view-article-title">{{ team.name }}
+                                <span>({{ team.members|length }})</span></h5>
+                            <p class="pm-view-article-subtitle">{{ team.quickid }}</p>
+                            <p class="card-text">{{ team.description }}</p>
+
+                            <p>Update: <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                             title="{{ team.updated|date("d.m.Y H:i") }} Uhr"
+                                             style="cursor:pointer;">{{ team.updated|date("d.m.Y") }}</span></p>
+                            <hr>
+                            <a role="button" href="{{ path('dashboard_team', {'team_id': team.id}) }}"
+                               class="btn btn-primary">Zum Team</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        {% endfor %}
+        <div class="col-auto pm-container-add">
+            <div class="pm-inner-container-add">
+                <h1 class="text-center mx-auto">Team hinzufügen</h1>
+                <a href="{{ path('team_create') }}">
+                    <img class="d-block mx-auto" src="{{ asset('imgs/add.png') }}" alt="Hinzufügen" width="35"
+                         height="35">
+                </a>
+            </div>
+        </div>
+    </div>
+    {% block TeamDeletePopup %}
+    {% endblock %}
+{% endblock %}

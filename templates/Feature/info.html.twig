@@ -1,0 +1,73 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+
+    <div class="container card p-4">
+        <h3>{{ feature.name }}</h3>
+        <span class="position-absolute top-0 end-0 text-end m-4">
+            {% if feature.status == 0 %}
+                #Offen
+            {% else %}
+                #Geschlossen
+            {% endif %}
+        </span>
+        <a class="link-dark" href="{{ path('dashboard_project', {'project_id': feature.project.id}) }}">Zurück zum
+            Projekt</a>
+        <hr>
+        <div class="table-responsive p-3">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th scope="row">Ersteller</th>
+                    <td>{{ feature.admin.uuid }} ( {{ feature.admin.name }} {{ feature.admin.lastName }})</td>
+                </tr>
+                <tr>
+                    <th scope="row">Erstellt am:</th>
+                    <td>{{ feature.creation|date("d.m.Y H:i") }} Uhr</td>
+                </tr>
+                <tr>
+                    <th scope="row">Beschreibung</th>
+                    <td>{{ feature.description|default('Keine Beschreibung vorhanden.') }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <hr>
+            <div class="position-relative">
+                <h3 class="mb-3">Bewertungen ({{ feature.votes|length }})</h3>
+                <div class="position-absolute top-0 end-0">
+                    <span class="text-end d-block"
+                          style="width:fit-content;">Zeitaufwand (Ø): {{ feature.averageTime|default(0) }}h - Priorität (Ø): {{ feature.averagePriority|default(0) }}</span>
+                </div>
+                {% if(feature.votes is not empty and feature.hasVoted(app.user) == true) %}
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Mitglied</th>
+                            <th scope="col">Zeitaufwand</th>
+                            <th scope="col">Priorität</th>
+                            <th scope="col">Erstellt am</th>
+                            <th scope="col">Aktualisiert am</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set numericInt = 0 %}
+                        {% for vote in feature.votes %}
+                            {% set numericInt = numericInt + 1 %}
+                            <tr>
+                                <th scope="row">{{ numericInt }}</th>
+                                <td>{{ vote.owner.uuid }}</td>
+                                <td>{{ vote.time }} Stunden</td>
+                                <td>{{ vote.priority }}</td>
+                                <td>{{ vote.creation|date("d.m.Y H:i") }} Uhr</td>
+                                <td>{{ vote.updated|date("d.m.Y H:i") }} Uhr</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>Keine Bewertungen gefunden oder sichtbar.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

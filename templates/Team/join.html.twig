@@ -1,0 +1,11 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+    <div class="pm-team-join-container">
+        <h1 class="mb-5">Team beitreten</h1>
+        {{ form_start(form) }}
+        {{ form_rest(form) }}
+
+        <button type="submit" class="btn btn-primary pm-project-create-btn mx-auto d-block">Anfrage schicken</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

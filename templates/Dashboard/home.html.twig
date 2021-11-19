@@ -1,0 +1,141 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+    <!-- QuickProjects Container -->
+    <div class="container-fluid pm-dash-home-header default-pd">
+        <div class="row justify-content-center default-pd pm-dash-home-header-row justify-content-md-start">
+            <h1 class="pm-dash-header-title">Projekte</h1>
+            {% if teams is not empty %}
+                {% for team in teams %}
+                    {% for project in team.projects %}
+                        <a class="col-auto" href="{{ path('dashboard_project', {'project_id': project.id}) }}"
+                           style="text-decoration: none; ">
+                            <div class="row pb-0 pm-dash-home-quickproject rounded">
+                                <div class="col-auto p-0 me-3">
+                                    <img src="{{ asset('imgs/placeholder-profil.png') }}" alt="Projekt-Bild" width="45"
+                                         height="45">
+                                </div>
+                                <div class="col p-0">
+                                    <h1>{{ project.name }}</h1>
+                                    <h3>@{{ project.team.name }}</h3>
+                                    <p class="pm-dash-quickproject-info">
+                                        <span>Features: </span>{{ project.features|length }}</p>
+                                    <p class="pm-dash-quickproject-info">
+                                        <span>Update: </span>{{ project.updated|date("d.m.Y") }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+
+                {% endfor %}
+            {% else %}
+                <p class="mt-3">Es wurden keine Projekte gefunden (<a href="{{ path('project_create') }}"
+                                                                      class="link-primary">erstellen</a>).</p>
+            {% endif %}
+        </div> <!-- end of row -->
+    </div>
+    {% if teams is not empty %}
+        <div class="container-fluid row m-0 mt-2  p-0">
+            <div class="col m-0 p-0">
+                <div class="accordion m-0" id="accordion_dash_teams">
+                    {% for team in teams %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDashTeam{{ team.quickid|slice(1,9) }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseDashTeam{{ team.quickid|slice(1,9) }}"
+                                        aria-expanded="false"
+                                        aria-controls="collapseDashTeam{{ team.quickid|slice(1,9) }}">
+                                    {{ team.name }} [Team]
+                                </button>
+                            </h2>
+                            <div id="collapseDashTeam{{ team.quickid|slice(1,9) }}" class="accordion-collapse collapse"
+                                 aria-labelledby="headingDashTeam{{ team.quickid|slice(1,9) }}"
+                                 data-bs-parent="#accordion_dash_teams">
+                                <div class="accordion-body">
+                                    {% for project in team.projects %}
+                                        <div class="accordion m-0" id="accordion_dash_projects">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header"
+                                                    id="headingDashProject{{ project.quickid|slice(1,9) }}">
+                                                    <button class="accordion-button" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapseDashProject{{ project.quickid|slice(1,9) }}"
+                                                            aria-expanded="false"
+                                                            aria-controls="collapseDashProject{{ project.quickid|slice(1,9) }}">
+                                                        └ {{ project.name }}</p>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseDashProject{{ project.quickid|slice(1,9) }}"
+                                                     class="accordion-collapse collapse"
+                                                     aria-labelledby="headingDashProject{{ project.quickid|slice(1,9) }}"
+                                                     data-bs-parent="#accordion_dash_projects">
+                                                    <div class="accordion-body">
+                                                        {% for feature in project.features %}
+                                                            <div class="accordion m-0" id="accordion_dash_features">
+                                                                <div class="accordion-item">
+                                                                    <h2 class="accordion-header"
+                                                                        id="headingDashFeature{{ feature.id }}">
+                                                                        <button class="accordion-button" type="button"
+                                                                                data-bs-toggle="collapse"
+                                                                                data-bs-target="#collapseDashFeature{{ feature.id }}"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapseDashFeature{{ feature.id }}">
+                                                                            └ {{ feature.name }}
+                                                                        </button>
+                                                                    </h2>
+                                                                    <div id="collapseDashFeature{{ feature.id }}"
+                                                                         class="accordion-collapse collapse"
+                                                                         aria-labelledby="headingDashFeature{{ feature.id }}"
+                                                                         data-bs-parent="#accordion_dash_features">
+                                                                        <div class="accordion-body">
+                                                                            {{ feature.description }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- HIERACHIE CONTAINER -->
+            <div class="col-auto">
+
+                <div class="container pm-dash-home-hierachie default-pd">
+                    <h1 class="pm-dash-header-title">Hierachie ({{ teams|length }})</h1>
+                    <hr>
+                    <div class="container">
+                        {% for team in teams %}
+                            <h5><a href="{{ path('dashboard_team', {'team_id': team.id}) }}"
+                                   class="link-dark">{{ team.name }}</a></h5>
+                            {% for project in team.projects %}
+                                <p class="ms-3 mb-1 ">└ <a
+                                            href="{{ path('dashboard_project', {'project_id': project.id}) }}"
+                                            class="link-dark">{{ project.name }}</a></p>
+                                {% for feature in project.features %}
+                                    <p class="ms-5 mb-1">└ {{ feature.name }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        setTimeout(function () {
+
+            // Closing the alert
+            $('.alert').alert('close');
+        }, 10000);
+    </script>
+{% endblock %}

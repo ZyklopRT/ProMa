@@ -1,0 +1,157 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+    <div class="pm-team-view-header">
+        <h1 class="pm-team-view-title position-relative">
+            {{ project.name }}
+            <div class="pm-team-view-category-container">
+                <span class="pm-team-view-category">Project</span>
+                <span class="pm-team-view-category" id="pm-category-orange">
+                    {% if(project.visibility == 1) %} Offen {% else %} Privat {% endif %}
+                </span>
+            </div>
+        </h1>
+        <p class="mb-1">@{{ project.team.name }} - {{ project.quickid }}</p>
+
+        <!-- DESCRIPTION COLLAPSE -->
+        <button class="btn btn-light pm-team-view-btn" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTeamViewDesc" aria-expanded="false" aria-controls="collapseTeamViewDesc">
+            Beschreibung
+        </button>
+        <!-- STATS COLLAPSE -->
+        <button class="btn btn-light pm-team-view-btn" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTeamViewStats" aria-expanded="false" aria-controls="collapseTeamViewSetting">
+            Statistiken
+        </button>
+        <!-- FEATURE COLLAPSE -->
+        <a href="{{ path('feature_create', {'project_id': project.id}) }}" class="btn btn-light pm-team-view-btn"
+           role="button">
+            Feature hinzufügen
+        </a>
+        <div class="collapse pm-team-view-collapse" id="collapseTeamViewDesc">
+            <div class="card card-body">
+                <h4>Beschreibung</h4>
+                {{ project.description }}
+            </div>
+        </div>
+        <div class="collapse pm-team-view-collapse" id="collapseTeamViewStats">
+            <div class="card card-body">
+                <!-- Stats -->
+                <div class="col-auto container pm-team-view-container rounded">
+                    <h1 class="pm-view-container-title">Statistiken</h1>
+                    <hr class="mt-2">
+                    <div class="container pm-stats-list p-0">
+                        <p>Update am: <span>{{ project.updated|date("d.m.Y") }}</span></p>
+                        <hr>
+                        <p>Erstelt am: <span>{{ project.creation|date("d.m.Y") }}</span></p>
+                        <p>Project-Leiter: <span>{{ project.owner.uuid }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Features -->
+        <div class="col-auto container pm-team-view-container">
+            <h1 class="pm-view-container-title">Features ({{ project.features|length }})</h1>
+            <hr class="mt-2">
+            {% if project.features %}
+                {# {% for feature in project.features|sort((a,b) => a.averageTime <=> b.averageTime)|reverse %} #}
+                {% for feature in project.features|sort((a,b) => a.averagePriority <=> b.averagePriority )|reverse %}
+                    <article class="pm-project-view-feature rounded">
+                        <div class="btn-group pm-project-view-feature-btn-container">
+                            <button type="button" class="btn pm-project-view-feature-btn btn-light dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                       href="{{ path('feature_info', {'feature_id': feature.id}) }}">Info</a></li>
+                                <li><a class="dropdown-item">Bearbeiten</a></li>
+                                <li><a class="dropdown-item" role="button"
+                                       href="{{ path('vote_add', {'feature_id': feature.id, 'project_id': project.id}) }}">Bewerten</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" role="button"
+                                       href="{{ path('feature_delete', {'feature_id': feature.id}) }}">Löschen</a></li>
+                            </ul>
+                        </div>
+                        <div class="row justify-content-center justify-content-lg-start position-relative">
+                            <div class="col-auto pm-project-view-feature-rating-container">
+                                <h1 class="pm-project-view-feature-title">{{ feature.name }}</h1>
+                                <div class="pm-project-view-feature-rating">
+                                    <p class="mb-1 mt-3">Bewertung:</p>
+                                    {% if feature.hasVoted(app.user) == true and feature.votes is not empty %}
+                                        <p style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                           data-bs-html="true"
+                                           title="Nutzer-Bewertung (Ø):<br><br>Zeitaufwand: {{ feature.averageTime }}h<br>Priorität: {{ feature.averagePriority }}">
+                                            [ {{ feature.averageTime }} Stunden ]
+                                        </p>
+                                        <div class="row justify-content-center mx-auto" style="max-width: 230px;">
+                                            {% for vote in feature.votes|sort((a,b) => a.time <=> b.time)|reverse %}
+                                                {% if loop.index <= 5 %}
+                                                    <div class="col-auto p-1">
+                                                        <img class="pm-dash-voter-icon"
+                                                             src="{{ asset('imgs/profil.png') }}" alt="Profibild"
+                                                             width="15px" height="15px" data-bs-placement="bottom"
+                                                             data-bs-toggle="tooltip" data-bs-html="true"
+                                                             title="{{ vote.owner.uuid }} ({{ vote.owner.name }})<br><br> Zeitaufwand: {{ vote.time }}h <br> Priorität: {{ vote.priority }}">
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <p style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                           data-bs-html="true"
+                                           title="Nutzer-Bewertung (Ø):<br><br>Keine Bewertungen gefunden/sichtbar">
+                                            [ N/A ]
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col pm-project-view-feature-container">
+                                <h1 class="pm-project-view-feature-title">Beschreibung</h1>
+                                <p>
+                                    {{ feature.description }}
+                                </p>
+                                <h6>Dependencies</h6>
+                                <p>Keine</p>
+                            </div>
+                        </div>
+                        <span class="pm-project-view-feature-author">Ersteller: {{ feature.admin.uuid }} - {{ feature.creation|date("d.m.Y") }}</span>
+                    </article><!-- end of feature -->
+                {% endfor %}
+            {% else %}
+                <p> Keine Features zum laden.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% block votePopUp %}
+    {% endblock %}
+    {% block deletePopUp %}
+    {% endblock %}
+{% endblock %}
+{% block javascripts %}
+    <script>
+
+        function closeConfirmPopUp(id) {
+            var element = document.getElementById('pm-confirm-popup-' + id);
+            element.style.display = 'none';
+        }
+
+        function openConfirmPopUp(id) {
+            var element = document.getElementById('pm-confirm-popup-' + id);
+            element.style.display = 'inherit';
+        }
+
+        function openVoteContainer(id) {
+            var element = document.getElementById('feature-vote-container-' + id)
+            element.style.display = 'inherit';
+        }
+
+        function closeVoteContainer(id) {
+            var element = document.getElementById("feature-vote-container-" + id);
+            element.style.display = 'none';
+        }
+    </script>
+{% endblock %}

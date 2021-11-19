@@ -1,0 +1,202 @@
+<!doctype HTML>
+<html>
+<head>
+    <!-- libaries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/main.style.css') }}">
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <!-- meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ProMa: Dashboard</title>
+
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar pm-navbar-dash navbar-expand-lg navbar-light bg-light position-fixed w-100">
+    <a class="navbar-brand" href="{{ path('dashboard_home') }}">ProMa Dashboard</a>
+    <a role="button" class="d-block d-md-none" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('default') }}">Startseite</a>
+            </li>
+        </ul>
+    </div>
+
+</nav>
+<div class="container-fluid pm-dash-container">
+
+    <!-- Main content -->
+    <div class="container-fluid pm-dash-content row p-0">
+        <!-- SIDEBAR -->
+        <nav class="pm-dash-sidebar col-auto d-none d-lg-block" id="pm-sidebar-1">
+            <div class="pm-dash-side-background"></div>
+            <div class="container pm-dash-container">
+                <div class="container pm-dash-profil-container">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <img class="pm-sidebar-profil-icon" src="{{ asset('imgs/profil.png') }}" alt="Profilbild"
+                             width="50" height="50" aria-hidden="true">
+                        <div class="pm-sidebar-collapse">
+                            <h1>{{ app.user.name }} {{ app.user.lastName }}</h1>
+                            <span class="rounded">{{ app.user.uuid }}</span>
+                        </div>
+                        <img onclick="switchSidebar()" id="sidebar-switch-btn"
+                             class="pm-sidebar-toggle-btn mx-auto d-block mt-1" src="{{ asset('imgs/expand.png') }}"
+                             alt="Sidebar" width="18" height="18">
+
+                    {% endif %}
+                </div>
+                <ul class="pm-dash-sidebar-nav">
+                    <a href="{{ path('dashboard_home') }}">
+                        <li class="pm-sidebar-navlink">
+                            <img src="{{ asset('imgs/home.png') }}" alt="Logo" width="32" height="32"
+                                 data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Startseite">
+                            <span class="pm-sidebar-collapse">Startseite</span>
+                        </li>
+                    </a>
+                    <a href="{{ path('dashboard_teams') }}">
+                        <li class="pm-sidebar-navlink">
+                            <img src="{{ asset('imgs/team.png') }}" alt="Logo" width="32" height="32"
+                                 data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Meine Teams">
+                            <span class="pm-sidebar-navlink-text pm-sidebar-collapse">Meine Teams</span>
+                        </li>
+                    </a>
+                    <a href="{{ path('notify_home') }}">
+                        <li class="pm-sidebar-navlink">
+                            <img src="{{ asset('imgs/message.png') }}" alt="Logo" width="32" height="32"
+                                 data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Mitteilungen">
+                            <span class="pm-sidebar-collapse">Mitteilungen</span>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+            <div class="container">
+                <a href="{{ path('account_logout') }}">
+                    <img class="mx-auto d-block" src="{{ asset('imgs/login.png') }}" alt="Abmelden" width="35"
+                         height="35" data-toggle="tooltip" data-placement="top" title="Abmelden">
+                </a>
+            </div>
+        </nav>
+        <div class="container-fluid pm-dash-container-main col">
+            {% block body %}
+                {{ content|raw }}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% block alerts %}
+    <!-- ALERTS -->
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger pm-dash-alert" id="danger-alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success pm-dash-alert" id="danger-alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endblock %}
+</body>
+<footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-bs-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        function minifySidebar() {
+            if (typeof (Storage) !== "undefined") {
+                // close sidebar
+                $(".pm-sidebar-navlink img").each(function () {
+                    // console.log( index + ": " + $( this ).text() );
+                    $(this).addClass("mx-auto d-block")
+                });
+                $(".pm-sidebar-collapse").each(function () {
+                    // console.log( index + ": " + $( this ).text() );
+                    $(this).addClass('d-none');
+                });
+            }
+        }
+
+        function expandSidebar() {
+            // close sidebar
+            if (typeof (Storage) !== "undefined") {
+                $(".pm-sidebar-navlink img").each(function () {
+                    // console.log( index + ": " + $( this ).text() );
+                    $(this).removeClass("mx-auto d-block")
+                });
+                $(".pm-sidebar-collapse").each(function () {
+                    // console.log( index + ": " + $( this ).text() );
+                    $(this).removeClass('d-none');
+                });
+            }
+        }
+
+        function sidebarListener() {
+            console.log(localStorage.getItem("sidebar"));
+            if (localStorage.getItem("sidebar") === "closed") {
+                minifySidebar();
+            } else {
+                expandSidebar();
+            }
+        }
+
+        sidebarListener();
+
+        function switchSidebar() {
+            if (typeof (Storage) !== "undefined") {
+                if (localStorage.getItem("sidebar") === "closed") {
+                    expandSidebar();
+                    $("#sidebar-switch-btn").attr("src", "/imgs/collapse.png");
+                    localStorage.setItem("sidebar", "opened");
+                } else {
+                    minifySidebar();
+                    $("#sidebar-switch-btn").attr("src", "/imgs/expand.png");
+                    localStorage.setItem("sidebar", "closed");
+                }
+            }
+        }
+
+    </script>
+    <script type="text/javascript">
+        setTimeout(function () {
+
+            // Closing the alert
+            $('.alert').alert('close');
+        }, 10000);
+    </script>
+    <script>
+        function closeConfirmPopUp(id) {
+            var element = document.getElementById('pm-confirm-popup-' + id);
+            element.style.display = 'none';
+        }
+
+        function openConfirmPopUp(id) {
+            var element = document.getElementById('pm-confirm-popup-' + id);
+            element.style.display = 'inherit';
+        }
+    </script>
+    {% block javascripts %}
+    {% endblock %}
+</footer>
+</html>

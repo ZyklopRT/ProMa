@@ -1,0 +1,130 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+    <div class="pm-team-view-header">
+        <div class="row mb-3">
+            <div class="pm-team-view-head-container col-auto">
+                <h1 class="pm-team-view-title position-relative">
+                    {{ team.name }}
+                    <div class="pm-team-view-category-container">
+                        <span class="pm-team-view-category">Team</span>
+                        <span class="pm-team-view-category" id="pm-category-orange">
+                    {% if(team.invitation == 1) %} Privat {% else %} Offen {% endif %}
+                </span>
+                    </div>
+                </h1>
+                <p class="mb-1">{{ team.quickid }}</p>
+            </div>
+            <div class="pm-team-view-head-description-container col">
+                {% if team.description is empty %}
+                    <p>Keine Beschreibung gefunden.</p>
+                {% else %}
+                    <p>{{ team.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- MEMBERS COLLAPSE -->
+        <button class="btn btn-light pm-team-view-btn" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTeamViewMembers" aria-expanded="false" aria-controls="collapseTeamViewSetting">
+            Mitglieder
+        </button>
+        <!-- LOG-FILE COLLAPSE -->
+        <button class="btn btn-light pm-team-view-btn" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTeamViewLog" aria-expanded="false" aria-controls="collapseTeamViewMembers">
+            Sonstiges
+        </button>
+        <a class="btn btn-light pm-team-view-btn" role="button" href="{{ path('team_invite', {'team_id': team.id}) }}">
+            Nutzer einladen
+        </a>
+
+
+        <div class="collapse pm-team-view-collapse" id="collapseTeamViewMembers">
+            <div class="card card-body">
+                <div class="col-auto container pm-team-view-container rounded">
+                    <h1 class="pm-view-container-title">Mitglieder ({{ team.members|length }})</h1>
+                    <hr class="mt-2">
+                    <div class="container pm-view-members-list p-0">
+                        {% for member in team.members %}
+                            <a class="rounded pm-view-member-item">
+                                {{ member.uuid }}<span>#Admin</span>
+                                <span class="pm-view-member-item-online bg-success border border-light rounded-circle">
+                                </span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse pm-team-view-collapse" id="collapseTeamViewLog">
+            <div class="card card-body">
+                <!-- Log -->
+                <div class="col-auto container pm-team-view-container rounded">
+                    <h1 class="pm-view-container-title">Log-File</h1>
+                    <hr class="mt-2">
+                    <div class="container">
+                        <p class="pm-view-log-text"><span>(1.02.2021:21:32Uhr) - </span> Zyklop fügt hinzu Feature#381
+                        </p>
+                        <p class="pm-view-log-text"><span>(1.02.2021:21:32Uhr) - </span> Zyklop fügt hinzu Feature#381
+                        </p>
+                        <p class="pm-view-log-text"><span>(1.02.2021:21:32Uhr) - </span> Zyklop fügt hinzu Feature#381
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Log -->
+        <div class=" col-auto container pm-team-view-container rounded">
+            <h1 class="pm-view-container-title">Alle Projekte</h1>
+            <hr class="mt-2 w-50">
+            <div class="row">
+                {% if team.projects %}
+                    {% for project in team.projects %}
+                        <div class="col-auto">
+                            <article>
+                                <div class="card pm-view-article" style="width: 18rem;">
+                                    <img src="{{ asset('imgs/background.jpg') }}" class="card-img-top" alt="...">
+                                    <span class="pm-view-article-delete" data-toggle="tooltip" data-placement="top"
+                                          title="Projekt entfernen">
+                                    <a href="{{ path('project_remove', {'project_id': project.id}) }}"><img
+                                                src="{{ asset('imgs/bin.png') }}" alt="Löschen" width="15" height="15"></a>
+                                </span>
+                                    <span class="pm-view-article-visible">{{ project.owner.name }} <br>{% if(project.visibility == 0) %} Privat {% else %} Offen {% endif %}</span>
+                                    <div class="card-body pm-view-article-body">
+                                        <h5 class="card-title pm-view-article-title">{{ project.name }}
+                                            <span>({{ project.creation|date("d.m.Y") }})</span></h5>
+                                        <p class="pm-view-article-subtitle">{{ project.team_text }}</p>
+                                        <p class="card-text">{{ project.description|default('Keine Beschreibung gefunden.') }}</p>
+                                        <a role="button"
+                                           href="{{ path('dashboard_project', {'project_id': project.id}) }}"
+                                           class="btn btn-primary">Zum Projekt</a>
+                                        <hr>
+                                        <p>Update: <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                         title="{{ project.updated|date("d.m.Y H:i") }} Uhr"
+                                                         style="cursor:pointer;">{{ project.updated|date("d.m.Y") }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Es gibt keine Projekte zum laden. </p>
+                {% endif %}
+                <div class="col-auto pm-container-add">
+                    <div class="pm-inner-container-add">
+                        <h1 class="text-center mx-auto">Projekt hinzufügen</h1>
+                        <a href="{{ path('project_create', {'team_id': team.id}) }}">
+                            <img class="d-block mx-auto" src="{{ asset('imgs/add.png') }}" alt="Hinzufügen" width="35"
+                                 height="35">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block projectDeletePopUp %}
+    {% endblock %}
+{% endblock %}

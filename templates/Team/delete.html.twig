@@ -1,0 +1,22 @@
+{% extends 'Team/view_all.html.twig' %}
+{% block TeamDeletePopup %}
+    <!-- Team Delete -->
+    <div class="pm-confirm-popup-container" id="pm-confirm-popup-{{ team.quickid|slice(1,5) }}">
+        <div class="pm-confirm-popup-inner-container rounded">
+            <form action="{{ path('team_remove', {'team_id': team.id}) }}" method="POST">
+                <h1>Möchtest du wirklich diese Eingabe ausführen?</h1>
+                <p class="mb-5">Entfernung von {{ team.name }}</p>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-light btn-confirm-cancel"
+                                onclick="closeConfirmPopUp({{ team.quickid|slice(1,5) }})">Abbrechen
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary btn-confirm-confirm">Ausführen</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+    <h1 class="pm-account-view-title">Deine Projekte</h1>
+    <!-- PROJECT FILTER -->
+    <ul class="pm-account-view-filter">
+        <li><a class="link-dark" href="#">Eigene</a></li>
+        <li>•</li>
+        <li><a class="link-dark" href="#">Neuste</a></li>
+        <li>•</li>
+        <li><a class="link-dark" href="#">Favoriten</a></li>
+        <li>•</li>
+        <li><a class="link-dark" href="#">Alle</a></li>
+    </ul>
+    <!-- PROJECTS -->
+    <div class="row justify-content-center justify-content-md-start">
+        {% if projects is iterable %}
+            {% for project in projects %}
+                <div class="col-auto mt-3">
+                    <article class="h-100">
+                        <div class="card pm-view-article" style="width: 18rem;">
+                            <img src="{{ asset('imgs/background.jpg') }}" class="card-img-top" alt="...">
+                            <span class="pm-view-article-delete" data-toggle="tooltip" data-placement="top"
+                                  title="Projekt entfernen">
+                                <a href="{{ path('project_remove', {'project_id': project.id}) }}"><img
+                                            src="{{ asset('imgs/bin.png') }}" alt="Löschen" width="15" height="15"></a>
+                            </span>
+                            <span class="pm-view-article-visible">
+                                {{ project.owner.uuid }} <br>
+                                {% if(project.visibility == 0) %} Privat {% else %} Offen {% endif %}
+                            </span>
+                            <div class="card-body pm-view-article-body">
+                                <h5 class="card-title pm-view-article-title">{{ project.name }}
+                                    <span>({{ project.creation|date("d.m.Y") }})</span></h5>
+                                <p class="pm-view-article-subtitle">{{ project.team.name }}</p>
+                                <p class="card-text">{{ project.description }}</p>
+                                <a role="button" href="{{ path('dashboard_project', {'project_id': project.id}) }}"
+                                   class="btn btn-primary">Zum Projekt</a>
+                                <hr>
+                                <p>Update: <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                 title="{{ project.updated|date("d.m.Y H:i") }} Uhr"
+                                                 style="cursor:pointer;">{{ project.updated|date("d.m.Y") }}</span></p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="col-auto pm-container-add">
+            <div class="pm-inner-container-add">
+                <h1 class="text-center mx-auto">Projekt hinzufügen</h1>
+                <a href="{{ path('project_create') }}">
+                    <img class="d-block mx-auto" src="{{ asset('imgs/add.png') }}" alt="Hinzufügen" width="35"
+                         height="35">
+                </a>
+            </div>
+        </div>
+    </div>
+    {% block projectDeletePopUp %}
+    {% endblock %}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        function closeConfirmPopUp(id) {
+            var element = document.getElementById('pm-confirm-popup-' + id);
+            element.style.display = 'none';
+        }
+
+        function openConfirmPopUp(id) {
+            var element = document.getElementById('pm-confirm-popup-' + id);
+            element.style.display = 'inherit';
+        }
+    </script>
+{% endblock %}

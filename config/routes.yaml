@@ -1,0 +1,119 @@
+default:
+  path: /
+  controller: jjansen\Controller\DefaultController::indexAction
+
+
+account_register:
+  path: /account/register
+  controller: jjansen\Controller\AccountController::registerAction
+
+account_login:
+  path: /account
+  controller: jjansen\Controller\LoginController::indexAction
+
+account_logout:
+  path: /logout
+  methods: GET
+
+
+dashboard_home:
+  path: dashboard/home
+  controller: jjansen\Controller\DashboardController::loadHomeAction
+
+dashboard_projects:
+  path: dashboard/projects
+  controller: jjansen\Controller\ProjectController::loadProjectsAction
+
+
+dashboard_teams:
+  path: dashboard/teams/{filter}
+  controller: jjansen\Controller\TeamController::loadTeamsAction
+  defaults:
+    filter: 0
+
+
+dashboard_team:
+  path: dashboard/team/{team_id}
+  controller: jjansen\Controller\TeamController::loadTeamAction
+  requirements:
+    team_id: '\d+'
+
+
+dashboard_project:
+  path: dashboard/project/{project_id}
+  controller: jjansen\Controller\ProjectController::loadProjectAction
+  requirements:
+    project_id: '\d+'
+
+
+dashboard_project_edit:
+  path: dashboard/project/edit/{project_id}
+  controller:
+  requirements:
+    project_id: '\d+'
+
+
+vote_add:
+  path: feature/vote/{feature_id}/{project_id}
+  controller: jjansen\Controller\VoteController::addAction
+  requirements:
+    feature_id: '\d+'
+    project_id: '\d+'
+
+feature_info:
+  path: feature/info/{feature_id}
+  controller: jjansen\Controller\FeatureController::infoAction
+  requirements:
+    feature_id: '\d+'
+
+feature_create:
+  path: feature/create/{project_id}
+  controller: jjansen\Controller\FeatureController::createAction
+  requirements:
+    project_id: '\d+'
+
+feature_delete:
+  path: feature/delete/{feature_id}
+  controller: jjansen\Controller\FeatureController::removeAction
+  requirements:
+    project_id: '\d+'
+
+
+project_create:
+  path: project/create
+  controller: jjansen\Controller\ProjectController::createAction
+
+project_remove:
+  path: project/remove/{project_id}
+  controller: jjansen\Controller\ProjectController::removeAction
+  requirements:
+    project_id: '\d+'
+
+team_create:
+  path: team/create
+  controller: jjansen\Controller\TeamController::createAction
+
+team_remove:
+  path: team/remove/{team_id}
+  controller: jjansen\Controller\TeamController::removeAction
+  requirements:
+    project_id: '\d+'
+
+team_invite:
+  path: team/member/invite/{team_id}
+  controller: jjansen\Controller\TeamController::inviteAction
+  requirements:
+    team_id: '\d+'
+
+team_join:
+  path: team/join
+  controller: jjansen\Controller\TeamController::joinAction
+
+notify_home:
+  path: notify/home
+  controller: jjansen\Controller\NotificationController:loadAction
+
+notify_invite:
+  path: notify/invite/{invite_id}/{status}
+  controller: jjansen\Controller\NotificationController:inviteAction
+

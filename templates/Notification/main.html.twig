@@ -1,0 +1,52 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+    <div class="container-fluid default-pd">
+        <div class="pm-notify-container bg-light rounded default-pd">
+            <h1 class="pm-dash-header-title">Deine Mittelungen (0)</h1>
+            <p class="mb-5">Hier siehst Du erhaltenden Benachrichtigungen, Einladungen und mehr.</p>
+
+            <h6 class="mb-3">Eingehend (an dich)</h6>
+            <table class="table table-responsive table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sender</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Inhalt</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for invitation in app.user.invitations %}
+                    {{ dump(app.user.invitations) }}
+                    {% if invitation.target.id == app.user.id %}
+
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>{{ invitation.owner.uuid }} ({{ invitation.owner.name }} {{ invitation.owner.lastName }}
+                                )
+                            </td>
+                            <td>{{ invitation.team.name }} ({{ invitation.team.quickid }})</td>
+                            <td>Du wurdest in das Team {{ invitation.team.name }} eingeladen</td>
+                            <td>{{ invitation.creation|date("d.m.Y H:i") }} Uhr</td>
+                            <td>
+                                <a href="{{ path('notify_invite', {'invite_id': invitation.id,'status': 'decline'}) }}"><img
+                                            class="me-1" src="{{ asset('imgs/close.png') }}" alt="Ablehnen" width="22"
+                                            height="22" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            data-bs-title="Anfrage ablehnen"></a>
+                                <a href="{{ path('notify_invite', {'invite_id': invitation.id,'status': 'accept'}) }}"><img
+                                            class="me-1" src="{{ asset('imgs/accept.png') }}" alt="Ablehnen" width="22"
+                                            height="22" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            data-bs-title="Anfrage annehmen"></a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="card w-50 mx-auto">
+        <div class="card-title">
+            {% if entity.id > 0 %}
+                Aufgabe bearbeiten
+            {% else %}
+                Aufgabe erstellen
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_row(form) }}
+            <button type="submit" class="btn btn-primary">Absenden</button>
+            {{ form_rest(form) }}
+        </div>
+    </div>
+
+{% endblock %}

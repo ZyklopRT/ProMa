@@ -1,0 +1,22 @@
+{% extends 'Project/view.html.twig' %}
+{% block deletePopUp %}
+    <!-- Feature Delete -->
+    <div class="pm-confirm-popup-container" id="pm-confirm-popup-{{ feature.id }}">
+        <div class="pm-confirm-popup-inner-container rounded">
+            <form action="{{ path('feature_delete', {'feature_id': feature.id}) }}" method="POST">
+                <h1>Möchtest du wirklich diese Eingabe ausführen?</h1>
+                <p class="mb-5">Entfernung von #{{ feature.name }}</p>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-light btn-confirm-cancel"
+                                onclick="closeConfirmPopUp({{ feature.id }})">Abbrechen
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary btn-confirm-confirm">Ausführen</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div id="account-body">
+        <!-- MAIN CONTENT -->
+        <div class="pm-account-container rounded">
+            <form class="needs-validation" action="{{ path('account_register') }}" method="POST">
+                <div class="mb-5 pm-account-text">
+                    <h1>Konto Erstellen</h1>
+                    <p>ProMa Mitglied</p>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text"
+                           class="pm-account-input form-control <{% if errors['uid'] %} is-invalid {% endif %}"
+                           id="floating_uid2 acccountValidationFeedUID" aria-labelledby="acccountValidationFeedUID"
+                           placeholder="Benutzername*" name="uid" value="{{ request.get('uid') }}" required>
+                    <label for="floating_uid2">Benutzername*</label>
+                    <div class="invalid-feedback" id="acccountValidationFeedUID">
+                        {{ errors['uid'] }}
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email"
+                           class="pm-account-input form-control {% if errors['email'] %} is-invalid {% endif %}"
+                           id="floating_email2 acccountValidationFeedEMAIL"
+                           aria-labelledby="acccountValidationFeedEMAIL" placeholder="E-Mail*"
+                           name="email" value="{{ request.get('email') }}" required>
+                    <label for="floating_email2">E-Mail*</label>
+                    <div class="invalid-feedback" id="acccountValidationFeedEMAIL">
+                        {{ errors['email'] }}
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text"
+                           class="pm-account-input form-control {% if errors['name'] %} is-invalid {% endif %}"
+                           id="floating_name2 acccountValidationFeedNAME" aria-labelledby="acccountValidationFeedNAME"
+                           placeholder="Vorname"
+                           name="name" value="{{ request.get('name') }}">
+                    <label for="floating_name2">Vorname</label>
+                    <div class="invalid-feedback" id="acccountValidationFeedNAME">
+                        {{ errors['name'] }}
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text"
+                           class="pm-account-input form-control <{% if errors['last'] %} is-invalid {% endif %}"
+                           id="floating_last2 acccountValidationFeedLast" aria-labelledby="acccountValidationFeedLast"
+                           placeholder="Nachname"
+                           name="last" value="{{ request.get('last') }}">
+                    <label for="floating_last2">Nachname</label>
+                    <div class="invalid-feedback" id="acccountValidationFeedLast">
+                        {{ errors['last'] }}
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password"
+                           class="pm-account-input form-control {% if (errors['pwd'] or errors['pwd2']) %} is-invalid {% endif %}"
+                           id="floating_pwd2 acccountValidationFeedPWD" aria-labelledby="acccountValidationFeedPWD"
+                           placeholder="Password*" name="pwd" value="{{ request.get('pwd') }}" required>
+                    <label for="floating_pwd2">Password*</label>
+                    <div class="invalid-feedback" id="acccountValidationFeedPWD">
+                        {{ errors['pwd'] }}
+                        {{ errors['pwd2'] }}
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password"
+                           class="pm-account-input form-control {% if (errors['pwd'] or errors['pwd2']) %} is-invalid {% endif %}"
+                           id="floating_pwd22 acccountValidationFeedPWD2" aria-labelledby="acccountValidationFeedPWD2"
+                           placeholder="Password*" name="pwdrepeat" value="{{ request.get('pwdrepeat') }}" required>
+                    <label for="floating_pwd2">Password wiederholen*</label>
+                    <div class="invalid-feedback" id="acccountValidationFeedPWD2">
+                        {{ errors['pwd'] }}
+                        {{ errors['pwd2'] }}
+                    </div>
+                </div>
+                <hr style="border-color: #ccc;">
+                <div class="pm-disclaimer-container">
+                    <a class="pm-disclaimer-text" href="{{ path('account_login') }}">Du hast bereits ein Konto? Hier
+                        anmelden!</a>
+                </div>
+                <div class="pm-account-btn-container">
+                    <button type="submit" name="submit" value="submit" class="btn btn-primary pm-account-btn"><img
+                                src="{{ asset('imgs/login.png') }}" alt="Anmelden" width="35" height="35"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
